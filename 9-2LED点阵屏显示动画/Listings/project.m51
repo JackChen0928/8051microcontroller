@@ -1,0 +1,186 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        08/15/2024  21:35:43  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+F:\KELI5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\Delay.obj, .\Objects\MatrixLED.obj TO .\Objects\project PRINT (.
+>> \Listings\project.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\Delay.obj (DELAY)
+  .\Objects\MatrixLED.obj (MATRIXLED)
+  F:\KELI5\C51\LIB\C51S.LIB (?C_STARTUP)
+  F:\KELI5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\project (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0030H     UNIT         ?DT?MAIN
+            DATA    0038H     0004H     UNIT         _DATA_GROUP_
+            IDATA   003CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0045H     UNIT         ?PR?MAIN?MAIN
+            CODE    00D4H     0035H     UNIT         ?PR?__74HC595_WRITEBYTE?MATRIXLED
+            CODE    0109H     0034H     UNIT         ?C_INITSEG
+            CODE    013DH     0022H     UNIT         ?PR?_MATRIXLED_SHOWCOLUMN?MATRIXLED
+            CODE    015FH     0016H     UNIT         ?PR?_DELAY?DELAY
+            CODE    0175H     0005H     UNIT         ?PR?MATRIXLED_INIT?MATRIXLED
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\project (MAIN)
+
+
+SEGMENT                                       DATA_GROUP 
+  +--> CALLED SEGMENT                       START    LENGTH
+-----------------------------------------------------------
+?C_C51STARTUP                               -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                               0038H    0003H
+  +--> ?PR?MATRIXLED_INIT?MATRIXLED
+  +--> ?PR?_MATRIXLED_SHOWCOLUMN?MATRIXLED
+  +--> ?PR?_DELAY?DELAY
+
+?PR?_MATRIXLED_SHOWCOLUMN?MATRIXLED         003BH    0001H
+  +--> ?PR?__74HC595_WRITEBYTE?MATRIXLED
+  +--> ?PR?_DELAY?DELAY
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/15/2024  21:35:43  PAGE 2
+
+
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        Animation
+  C:008FH         PUBLIC        main
+  -------         PROC          MAIN
+  -------         DO            
+  D:0038H         SYMBOL        i
+  D:0039H         SYMBOL        Offset
+  D:003AH         SYMBOL        Count
+  -------         ENDDO         
+  C:008FH         LINE#         14
+  C:008FH         LINE#         15
+  C:008FH         LINE#         16
+  C:0095H         LINE#         17
+  C:0098H         LINE#         18
+  C:0098H         LINE#         19
+  C:0098H         LINE#         20
+  C:009BH         LINE#         21
+  C:009BH         LINE#         22
+  C:00ABH         LINE#         23
+  C:00B4H         LINE#         24
+  C:00B6H         LINE#         25
+  C:00BDH         LINE#         26
+  C:00BDH         LINE#         27
+  C:00BFH         LINE#         28
+  C:00C6H         LINE#         29
+  C:00C8H         LINE#         30
+  C:00CFH         LINE#         31
+  C:00CFH         LINE#         32
+  C:00D2H         LINE#         33
+  C:00D2H         LINE#         34
+  C:00D2H         LINE#         35
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:015FH         PUBLIC        _Delay
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:015FH         LINE#         4
+  C:015FH         LINE#         5
+  C:015FH         LINE#         7
+  C:0169H         LINE#         8
+  C:0169H         LINE#         9
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/15/2024  21:35:43  PAGE 3
+
+
+  C:016AH         LINE#         10
+  C:016CH         LINE#         11
+  C:016EH         LINE#         13
+  C:016EH         LINE#         14
+  C:0170H         LINE#         15
+  C:0172H         LINE#         17
+  C:0174H         LINE#         19
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        MATRIXLED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  C:00D4H         PUBLIC        __74HC595_WriteByte
+  D:00B0H         PUBLIC        P3
+  C:013DH         PUBLIC        _MatrixLED_ShowColumn
+  C:0175H         PUBLIC        MatrixLED_Init
+  B:00B0H.5       PUBLIC        RCK
+  B:00B0H.6       PUBLIC        SCK
+  B:00B0H.4       PUBLIC        SER
+  -------         PROC          __74HC595_WRITEBYTE
+  D:0001H         SYMBOL        Byte
+  -------         DO            
+  D:0002H         SYMBOL        i
+  -------         ENDDO         
+  C:00D4H         LINE#         17
+  C:00D6H         LINE#         18
+  C:00D6H         LINE#         20
+  C:00D9H         LINE#         21
+  C:00D9H         LINE#         22
+  C:00F5H         LINE#         23
+  C:00F7H         LINE#         24
+  C:00F9H         LINE#         25
+  C:0104H         LINE#         26
+  C:0106H         LINE#         27
+  C:0108H         LINE#         28
+  -------         ENDPROC       __74HC595_WRITEBYTE
+  -------         PROC          MATRIXLED_INIT
+  C:0175H         LINE#         35
+  C:0175H         LINE#         36
+  C:0175H         LINE#         37
+  C:0177H         LINE#         38
+  C:0179H         LINE#         39
+  -------         ENDPROC       MATRIXLED_INIT
+  -------         PROC          _MATRIXLED_SHOWCOLUMN
+  D:003BH         SYMBOL        Column
+  D:0004H         SYMBOL        Data
+  C:013DH         LINE#         48
+  C:013FH         LINE#         49
+  C:013FH         LINE#         50
+  C:0144H         LINE#         51
+  C:0154H         LINE#         52
+  C:015BH         LINE#         53
+  C:015EH         LINE#         54
+  -------         ENDPROC       _MATRIXLED_SHOWCOLUMN
+  -------         ENDMOD        MATRIXLED
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/15/2024  21:35:43  PAGE 4
+
+
+Program Size: data=61.0 xdata=0 code=378
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

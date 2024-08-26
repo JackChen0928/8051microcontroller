@@ -1,0 +1,172 @@
+C51 COMPILER V9.54   DS1302                                                                08/17/2024 02:14:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN .\Objects\DS1302.obj
+COMPILER INVOKED BY: F:\keli5\C51\BIN\C51.EXE DS1302.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\DS13
+                    -02.lst) TABS(2) OBJECT(.\Objects\DS1302.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          sbit DS1302_SCLK=P3^6;//^±íÊ¾µØÖ·
+   4          sbit DS1302_IO=P3^4;
+   5          sbit DS1302_CE=P3^5;
+   6          
+   7          //ºê¶¨Òå  ÈÝÒ×Àí½â   Ð¾Æ¬ÖÐµÄÒ»¸öµØÖ·´ú±íÒ»¸öÊ±¼äÊý¾Ý
+   8          #define DS1302_SECOND  0x80
+   9          #define DS1302_MINUTE  0x82
+  10          #define DS1302_HOUR  0x84
+  11          #define DS1302_DATE  0x86
+  12          #define DS1302_MONTH  0x88
+  13          #define DS1302_DAY    0x8A
+  14          #define DS1302_YEAR  0x8C
+  15          #define DS1302_WP  0x8E
+  16          
+  17          
+  18          unsigned char DS1302_TIME[]={19,11,16,12,59,55,6};
+  19          
+  20          void DS1302_Init(void)
+  21          {
+  22   1        DS1302_CE=0;//³õÊ¼»¯ÖÃ0
+  23   1        DS1302_SCLK=0;//³õÊ¼»¯ÖÃ0
+  24   1      }
+  25          
+  26          /**
+  27            * @brief  °ÑÊý¾ÝÐ´ÈëÐ¾Æ¬µÄ²Ù×÷
+  28            * @param  CommandÊÇÃüÁîµÄÊý¾Ý£¬À´¿ØÖÆÐ´Èë»¹ÊÇ¶ÁÈ¡µÈµÈ£¬DataÊÇÐ´ÈëµÄÊý¾Ý
+  29            * @retval ÎÞ
+  30            */
+  31          void DS1302_WriteByte(unsigned char Command,Data)
+  32          {
+  33   1          unsigned char i;
+  34   1          DS1302_CE=1;//°ÑCEÖÃ1£¬¸ù¾Ýµ¥¸ö×Ö½ÚµÄÊ±Ðò¶¨ÒåÍ¼À´È·¶¨Á÷³Ì
+  35   1        //Ð´ÈëÃüÁîµÄÊý¾Ý
+  36   1        for(i=0;i<8;i++)
+  37   1        {
+  38   2          //¸ù¾ÝÊ±Ðí¶¨ÐòÍ¼£¬DS1302µÄÐ´Èë²Ù×÷ÊÇ£ºÒ»¸öSCLKÂö³å ¶ÁÒ»Î»Êý£¬¶øÇÒÊÇSCLKÉÏÉýÑØ¶ÁÈëÒ»Î»
+  39   2          DS1302_IO=Command&(0x01<<i);//ÀûÓÃÑ­»·È¡³öµÚ0-µÚ7Î»Ð´ÈëIO¿Ú£¬ÈÃÐ¾Æ¬ÖªµÀÎÒÃÇÒª¸ÉÊ²Ã´£¬ÀýÈç0x01=0000 0001 
+             -Ïàµ±ÓÚÖ»ÁôÏÂµÚ0Î»£¬µÚ1-µÚ7Î»¶¼Çå0 
+  40   2          DS1302_SCLK=1;//°ÑSCLKÖÃ1£¬SCLKÉÏÉýÑØ¶ÁÈëÒ»Î»£¬¸ù¾ÝÊ±Ðò¶¨ÒåÍ¼À´È·¶¨Á÷³Ì
+  41   2          DS1302_SCLK=0;//°ÑSCLKÖÃ0£¬Íê³É¶ÁÈ¡
+  42   2        }
+  43   1        //Ð´ÈëÊý¾Ý²Ù×÷
+  44   1        for(i=0;i<8;i++)
+  45   1        {
+  46   2          //¸ù¾ÝÊ±Ðí¶¨ÐòÍ¼£¬DS1302µÄÐ´Èë²Ù×÷ÊÇ£ºÒ»¸öSCLKÂö³å ¶ÁÒ»Î»Êý£¬¶øÇÒÊÇSCLKÉÏÉýÑØ¶ÁÈëÒ»Î»
+  47   2          DS1302_IO=Data&(0x01<<i);//ÀûÓÃÑ­»·È¡³öµÚ0-µÚ7Î»Ð´ÈëIO¿Ú£¬ÈÃÐ¾Æ¬ÖªµÀÎÒÃÇÒªÏòÐ¾Æ¬ÀïÃæÐ´ÈëµÄÃ¿Ò»Î»Êý¾Ý£¬Àý
+             -Èç0x01=0000 0001 Ïàµ±ÓÚÖ»ÁôÏÂµÚ0Î»£¬µÚ1-µÚ7Î»¶¼Çå0 
+  48   2          DS1302_SCLK=1;//°ÑSCLKÖÃ1£¬SCLKÉÏÉýÑØ¶ÁÈëÒ»Î»£¬¸ù¾ÝÊ±Ðò¶¨ÒåÍ¼À´È·¶¨Á÷³Ì
+  49   2          DS1302_SCLK=0;//°ÑSCLKÖÃ0£¬Íê³É¶ÁÈ¡
+  50   2        }
+  51   1          DS1302_CE=0;//°ÑCEÖÃ0£¬ÊÇ¸ù¾Ýµ¥¸ö×Ö½ÚµÄÊ±Ðò¶¨ÒåÍ¼À´È·¶¨µÄ
+  52   1        
+C51 COMPILER V9.54   DS1302                                                                08/17/2024 02:14:36 PAGE 2   
+
+  53   1      }
+  54          
+  55          /**
+  56            * @brief  ´ÓÐ¾Æ¬ÖÐ¶Á³öÊý¾ÝµÄ²Ù×÷
+  57            * @param  CommandÊÇÃüÁîµÄÊý¾Ý£¬À´¿ØÖÆÐ´Èë»¹ÊÇ¶ÁÈ¡µÈµÈ
+  58            * @retval ·µ»ØDataÊÇ¶Á³öÀ´µÄÊý¾Ý
+  59            */
+  60          
+  61          unsigned char DS1302_ReadByte(unsigned char Command)
+  62          {
+  63   1          unsigned char i,Data=0x00;//°ÑData³õÊ¼»¯Îª0
+  64   1          Command|=0x01;
+  65   1          DS1302_CE=1;//°ÑCEÖÃ1£¬ÊÇ¸ù¾Ýµ¥¸ö×Ö½ÚµÄÊ±Ðò¶¨ÒåÍ¼À´È·¶¨µÄ
+  66   1          //Ð´ÈëÃüÁî²Ù×÷
+  67   1          for(i=0;i<8;i++)
+  68   1          {
+  69   2            DS1302_IO=Command&(0x01<<i);//ÀûÓÃÑ­»·È¡³öµÚ0-µÚ7Î»£¬ÀýÈç0x01=0000 0001 Ïàµ±ÓÚÖ»ÁôÏÂµÚ0Î»£¬µÚ1-µÚ7Î»¶¼Ç
+             -å0 
+  70   2            DS1302_SCLK=0;//ÒòÎªSCLKµÄÊ±Ðò²»ÊÇÎÒÃÇ¹æ¶¨µÄ£¬ÎÒÃÇÐèÒª¸úÉÏÕâ¸öÊ±Ðò¾ÍÒªÏÈ¸ø0 ºó¸ø1£¬²»È»»áÂÒ
+  71   2            DS1302_SCLK=1;//°ÑSCLKÖÃ1£¬SCLKÉÏÉýÑØ¶ÁÈëÒ»Î»£¬¸ù¾ÝÊ±Ðò¶¨ÒåÍ¼À´È·¶¨Á÷³Ì
+  72   2          }
+  73   1          //¶Á³öÊý¾Ý²Ù×÷
+  74   1          for(i=0;i<8;i++)
+  75   1          {
+  76   2            DS1302_SCLK=1;//ÕâÀïÖØ¸´ÖÃ1£¬Ã»ÓÐ¹ØÏµ£¬Èç¹ûÏÈ0ºó1 »áµ¼ÖÂ×îºóSCLKÎª1£¬ÓëÊ±ÐòÍ¼²»·û
+  77   2            DS1302_SCLK=0;
+  78   2            if(DS1302_IO){Data=Data|(0x01<<i);}//Èç¹ûio¿Ú½ÓÊÜµ½Êý¾Ý£¨==1£©£¬ÒòÎªÉÏÃæDS1302_IO=Command&(0x01<<7)£¬¸ù
+             -¾ÝÊ±ÐòÍ¼ÊÇµÈÓÚ1µÄ£¬È»ºódata¾ÍÖðÒ»¶Á³öÊý¾ÝÃ¿Ò»Î»
+  79   2          }
+  80   1          DS1302_CE=0;//°ÑCEÖÃ0£¬ÊÇ¸ù¾Ýµ¥¸ö×Ö½ÚµÄÊ±Ðò¶¨ÒåÍ¼À´È·¶¨µÄ
+  81   1          DS1302_IO=0;
+  82   1          return Data;
+  83   1      }
+  84          
+  85          
+  86          
+  87          
+  88          
+  89          
+  90          /**
+  91            * @brief  ÉèÖÃÒ»¸öÎÒÃÇ×Ô¼ºÄ¿Ç°µÄ³õÊ¼Ê±¼ä£¬ÕâÀïÎÒÃÇ°ÑÊ±¼äµÄÊý×Ö¶¼Ð´³ÉÁËÊý×éDS1302_TIME[]£¬·½±ãÐ´´úÂë
+  92            * @param  ÎÞ
+  93            * @retval ÎÞ
+  94            */
+  95          void DS1302_SetTime(void)
+  96          {
+  97   1        DS1302_WriteByte(DS1302_WP,0x00);//¹Ø±ÕÐ´±£»¤
+  98   1        DS1302_WriteByte(DS1302_YEAR,DS1302_TIME[0]/10*16+DS1302_TIME[0]%10);//ÕâÀïµÄ±í´ïÊ½ÊÇ½«Ê®½øÖÆ×ª³ÉBCDÂë£¬Ò
+             -òÎªÐ¾Æ¬DS1302ÊÇÓÃBCDÂëÀ´´¢´æÊý×ÖµÄ
+  99   1        DS1302_WriteByte(DS1302_MONTH,DS1302_TIME[1]/10*16+DS1302_TIME[1]%10);
+ 100   1        DS1302_WriteByte(DS1302_DATE,DS1302_TIME[2]/10*16+DS1302_TIME[2]%10);
+ 101   1        DS1302_WriteByte(DS1302_HOUR,DS1302_TIME[3]/10*16+DS1302_TIME[3]%10);
+ 102   1        DS1302_WriteByte(DS1302_MINUTE,DS1302_TIME[4]/10*16+DS1302_TIME[4]%10);
+ 103   1        DS1302_WriteByte(DS1302_SECOND,DS1302_TIME[5]/10*16+DS1302_TIME[5]%10);
+ 104   1        DS1302_WriteByte(DS1302_DAY,DS1302_TIME[6]/10*16+DS1302_TIME[6]%10);
+ 105   1        DS1302_WriteByte(DS1302_WP,0x80);//¿ªÆôÐ´±£»¤
+ 106   1      }
+ 107          
+ 108          
+ 109          /**
+ 110            * @brief  ¶ÁÈ¡Í¨¹ýÐ¾Æ¬¼ÆËãºóµÄÊ±¼ä£¬ÎÒÃÇ°Ñ³õÊ¼»¯µÄÊ±¼äÊäÈëÐ¾Æ¬ºó£¬Ð¾Æ¬»á×Ô¶¯¼ÆËã1sµÝÔöµÄÊ±¼ä£¬ÎÒÃÇÖ»ÐèÒª
+             -¶Á³öÊý¾Ý¼´¿É
+C51 COMPILER V9.54   DS1302                                                                08/17/2024 02:14:36 PAGE 3   
+
+ 111            * @param  ÎÞ
+ 112            * @retval ÎÞ
+ 113            */
+ 114          void DS1302_ReadTime(void)
+ 115          {
+ 116   1          unsigned char Temp;
+ 117   1          Temp=DS1302_ReadByte(DS1302_YEAR);//¶Á³öÀ´µÄÊý×ÖÔÝÊ±´æÓÚTempÖÐ£¬·½±ã×ª»¯ÎªÊ®½øÖÆ
+ 118   1          DS1302_TIME[0]=Temp/16*10+Temp%16;//ÕâÀïµÄ±í´ïÊ½ÊÇ½«BCDÂë×ª³ÉÊ®½øÖÆ£¬ÒòÎªÐ¾Æ¬DS1302ÊÇÓÃBCDÂëÀ´´¢´æÊý×ÖµÄ
+             -,ÎÒÃÇ´ÓÀïÃæ¶Á³öÀ´µÄÊý×ÖÊÇBCDÂë£¬ÐèÒª»¯³ÉÊ®½øÖÆ²ÅÄÜÏÔÊ¾ÔÚLCDÉÏ
+ 119   1        Temp=DS1302_ReadByte(DS1302_MONTH);
+ 120   1          DS1302_TIME[1]=Temp/16*10+Temp%16;//½«Õâ¸ö¶Á³öÀ´µÄ¼ÆËãºóµÄÊý×Ö£¬ÖØÐÂ¶ÁÈëÊý×éDS1302_TIME[]ÖÐ
+ 121   1        Temp=DS1302_ReadByte(DS1302_DATE);
+ 122   1          DS1302_TIME[2]=Temp/16*10+Temp%16;
+ 123   1        Temp=DS1302_ReadByte(DS1302_HOUR);
+ 124   1          DS1302_TIME[3]=Temp/16*10+Temp%16;
+ 125   1        Temp=DS1302_ReadByte(DS1302_MINUTE);
+ 126   1          DS1302_TIME[4]=Temp/16*10+Temp%16;
+ 127   1        Temp=DS1302_ReadByte(DS1302_SECOND);
+ 128   1          DS1302_TIME[5]=Temp/16*10+Temp%16;
+ 129   1        Temp=DS1302_ReadByte(DS1302_DAY);
+ 130   1          DS1302_TIME[6]=Temp/16*10+Temp%16;
+ 131   1        
+ 132   1      }
+ 133          
+ 134          
+ 135          
+ 136          
+ 137          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    551    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
